@@ -23,7 +23,6 @@ const Post = ({
     update(proxy) {
       let data = proxy.readQuery({ query: FETCH_POSTS_QUERY });
       let newData = [...data.getPosts];
-
       newData = newData.filter((p) => p.id !== id);
       proxy.writeQuery({
         query: FETCH_POSTS_QUERY,

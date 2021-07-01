@@ -33,11 +33,12 @@ const SubbmitPost = () => {
             <div class="mr-3">
               <img src="http://picsum.photos/50" alt="" class="rounded-full" />
             </div>
-            <div>
-              <h1 class="font-semibold">{currentUser.name}</h1>
-            </div>
+            {currentUser && (
+              <div>
+                <h1 class="font-semibold">{currentUser.name}</h1>
+              </div>
+            )}
           </div>
-
           <div class="mt-3 p-3 w-full">
             <textarea
               rows="3"

@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { AuthProvider } from "./context/AuthContext";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:5000",
+  uri: "https://merng-socialmedia-21.herokuapp.com/",
 });
 
 const authLink = setContext(() => {
