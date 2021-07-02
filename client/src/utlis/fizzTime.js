@@ -1,7 +1,4 @@
-export const getFuzzyTime = (nanosec) => {
-
-  var millisec = (nanosec * 1000)
-
+export const getFuzzyTime = (millisec) => {
   let res = "";
 
   const t_second = 1000;
@@ -16,11 +13,11 @@ export const getFuzzyTime = (nanosec) => {
   const dif = now - millisec;
 
   const fuzzy_string = (time_ref, time_str) => {
-      const fuzzy = Math.floor(dif / time_ref);
+    const fuzzy = Math.floor(dif / time_ref);
 
-      res += `${fuzzy} ${time_str}`;
-      if (fuzzy !== 1) res += "s";
-      res += " ago";
+    res += `${fuzzy} ${time_str}`;
+    if (fuzzy !== 1) res += "s";
+    res += " ago";
   };
   if (dif >= t_year) fuzzy_string(t_year, "year");
   else if (dif >= t_month) fuzzy_string(t_month, "month");

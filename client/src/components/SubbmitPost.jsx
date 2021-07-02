@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const SubbmitPost = () => {
   const [body, setBody] = useState("");
+  const [bodyError, setBodyError] = useState(false);
+  const [userError, setUserError] = useState(false);
   const { currentUser, setErrorsList } = useAuth();
-  const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
+  const [createPost, { loading }] = useMutation(CREATE_POST_MUTATION, {
     variables: { body },
     update(proxy, result) {
       const data = proxy.readQuery({ query: FETCH_POSTS_QUERY });
@@ -21,50 +24,103 @@ const SubbmitPost = () => {
       setBody("");
     },
     onError(err) {
-      console.log(err.graphQLErrors, err.message);
+      setErrorsList(err.message);
     },
   });
 
-  return (
-    <div class="p-8 flex flex-row justify-between">
-      <div class="flex  min-w-lg max-h-lg bg-gray-800 justify-center items-center">
-        <div class=" min-w-lg m-1 bg-white p-2 pt-4 rounded">
-          <div class="flex ml-3">
-            <div class="mr-3">
-              <img src="http://picsum.photos/50" alt="" class="rounded-full" />
-            </div>
-            {currentUser && (
-              <div>
-                <h1 class="font-semibold">{currentUser.name}</h1>
-              </div>
-            )}
-          </div>
-          <div class="mt-3 p-3 w-full">
-            <textarea
-              rows="3"
-              class="border p-2 rounded w-full"
-              placeholder="Write something..."
-              onChange={(e) => setBody(e.target.value)}
-            ></textarea>
-          </div>
+  const subbmitPost = () => {
+    if (body.trim() === "") {
+      setBodyError(true);
+      setTimeout(() => {
+        setBodyError(false);
+      }, 3000);
+      return;
+    }
+    if (!currentUser) {
+      setUserError(true);
+      setTimeout(() => {
+        setUserError(false);
+      }, 3000);
+      return;
+    }
+    createPost();
+  };
 
-          <div class="flex justify-between mx-3">
-            <div>
-              <button
-                class="px-4 py-1 bg-gray-800 text-white rounded font-light hover:bg-gray-700"
-                onClick={createPost}
-              >
-                Post
-              </button>
+  return (
+    <div className="p-8 flex flex-row justify-between">
+      <div className="bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md border-2">
+        <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
+          Post something
+        </h2>
+
+        <div className="relative mb-4">
+          <label htmlFor="message" className="leading-7 text-sm text-gray-600">
+            Message
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            className={`w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out ${
+              bodyError || userError ? "border-red-600" : ""
+            }`}
+            onChange={(e) => setBody(e.target.value)}
+            value={body}
+          ></textarea>
+          {bodyError && (
+            <div className="text-red-800 text-sm">Body can't be empty</div>
+          )}
+          {userError && (
+            <div className="text-red-800 text-sm">
+              Log In before creating a post
             </div>
-          </div>
+          )}
         </div>
+        <button
+          onClick={subbmitPost}
+          className={`text-white bg-indigo-500 border-0 py-2 px-6  hover:bg-indigo-600 rounded text-lg focus:outline-none ${
+            loading ? "opacity-50" : ""
+          } `}
+          disabled={loading}
+        >
+          {loading ? (
+            <span>
+              Posting...
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 animate-spin inline items-center"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+            </span>
+          ) : (
+            "Post"
+          )}
+        </button>
+        <p className="text-xs text-gray-500 mt-3">
+          {currentUser ? (
+            <span>Post will be created by user {currentUser.username}</span>
+          ) : (
+            <span>
+              You need to{" "}
+              <Link to="login" className="text-blue-600">
+                login
+              </Link>{" "}
+              before creating a post
+            </span>
+          )}
+        </p>
       </div>
     </div>
   );
 };
-
-export default SubbmitPost;
 
 const CREATE_POST_MUTATION = gql`
   mutation createPost($body: String!) {
@@ -111,3 +167,5 @@ const FETCH_POSTS_QUERY = gql`
     }
   }
 `;
+
+export default SubbmitPost;

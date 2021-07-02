@@ -11,7 +11,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (localStorage.getItem("jwtToken")) {
       const decodedToken = jwtDecode(localStorage.getItem("jwtToken"));
-
       if (decodedToken.exp * 1000 < Date.now()) {
         localStorage.removeItem("jwtToken");
       } else {
@@ -22,7 +21,6 @@ export function AuthProvider({ children }) {
 
   const [errorsList, setErrorsList] = useState(null);
 
-  console.log(currentUser);
   const value = {
     currentUser,
     setCurrentUser,
