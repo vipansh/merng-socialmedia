@@ -71,7 +71,7 @@ const Register = () => {
               This is a social platform where you can uplode status.
             </p>
           </div>
-          <form className="lg:w-1/2 md:w-2/3 mx-auto">
+          <div className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-col justify-center mx-auto items-center">
               <div className="p-2 w-full md:w-1/2 mx-auto">
                 <div className="relative">
@@ -257,7 +257,7 @@ const Register = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </section>
     </div>
