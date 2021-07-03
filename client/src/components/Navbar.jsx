@@ -11,7 +11,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex justify-between container mx-auto my-4 p-4">
+    <div className="flex justify-between max-w-screen-lg  mx-auto my-4 p-4 bg-gray-50">
       <Link to="/" className="block cursor-pointer">
         Home
       </Link>

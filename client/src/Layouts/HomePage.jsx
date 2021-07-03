@@ -3,7 +3,7 @@ import PostsLayout from '../components/PostsLayout.jsx'
 
 const HomePage = () => {
     return (
-        <div className="container mx-auto">
+        <div className=" max-w-screen-lg mx-auto bg-gray-50">
             <PostsLayout/>
         </div>
     )
